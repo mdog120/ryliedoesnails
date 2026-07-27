@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Book — Rylie Does Nails</title>
+    <link rel="icon" type="image/png" href="assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="overrides.css" />
+  </head>
+  <body class="inner-page booking-page">
+    <div class="announcement">
+      A little time just for you <a href="work.html">See the work →</a>
+    </div>
+    <header class="site-header">
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-menu"
+        aria-label="Open menu"
+      >
+        <span></span><span></span>
+      </button>
+      <a class="brand-name" href="index.html" aria-label="Rylie Nails home"
+        >Rylie <em>Nails</em><b>✦</b></a
+      >
+      <nav class="site-menu" id="site-menu" aria-label="Main navigation">
+        <a href="index.html">Home</a><a href="work.html">Work</a
+        ><a href="index.html#menu">Menu</a><a href="book.html">Book</a
+        ><a
+          href="https://www.instagram.com/rylie.does.nails/"
+          target="_blank"
+          rel="noreferrer"
+          >Instagram ↗</a
+        >
+      </nav>
+      <a class="mini-button" href="#booking-form"
+        >Request a set <span>↗</span></a
+      >
+    </header>
+    <main>
+      <section class="book-hero">
+        <div>
+          <p class="eyebrow">Let’s make a plan</p>
+          <h1>Book your<br /><i>nail moment.</i></h1>
+          <p>
+            Choose a date with an opening, then send Rylie your dream set.
+            She’ll confirm the perfect appointment time with you.
+          </p>
+          <div class="book-details">
+            <span>✦ Mansfield, Texas</span
+            ><span>✦ Gel-X &amp; acrylic only</span><span>✦ DM to book</span>
+          </div>
+        </div>
+        <img
+          src="assets/instagram-1.jpg"
+          alt="Fresh summer manicure by Rylie"
+        />
+      </section>
+      <section class="booking-calendar-section">
+        <div class="calendar-decoration">✦<br />♡<br />✦</div>
+        <div class="pretty-calendar">
+          <div class="calendar-top">
+            <button id="previous" aria-label="Previous week">←</button>
+            <div>
+              <p class="eyebrow">Current openings</p>
+              <h2 id="calendarTitle">August 2026</h2>
+            </div>
+            <button id="next" aria-label="Next week">→</button>
+          </div>
+          <div class="calendar-days" id="calendar"></div>
+          <div class="selected-slot" id="slotMessage">
+            Pick a blue day to see Rylie’s open times ✦
+          </div>
+          <div class="time-slots" id="timeSlots" aria-live="polite"></div>
+          <a class="button calendar-button" id="book" href="#booking-form"
+            >Continue with selected time <span>→</span></a
+          >
+        </div>
+        <div class="calendar-note">
+          <p class="eyebrow">Good to know</p>
+          <h3>Come with an<br /><i>idea — or not.</i></h3>
+          <p>
+            Save a few inspiration photos, or let’s build something from scratch
+            together. Nail art is always welcome here.
+          </p>
+        </div>
+      </section>
+      <section class="request-section" id="booking-form">
+        <div>
+          <p class="eyebrow">Almost there</p>
+          <h2>Your appointment<br /><i>request.</i></h2>
+          <p>
+            Rylie will personally confirm every request before it becomes an
+            appointment.
+          </p>
+        </div>
+        <form class="booking-form" id="bookingForm">
+          <div class="form-row">
+            <label
+              >Chosen time<input
+                id="chosenSlot"
+                name="appointment"
+                placeholder="Choose a calendar time above"
+                required
+                readonly
+            /></label>
+          </div>
+          <div class="form-row split">
+            <label
+              >Your name<input
+                name="name"
+                autocomplete="name"
+                required /></label
+            ><label
+              >Age<input name="age" type="number" min="13" max="99" required
+            /></label>
+          </div>
+          <div class="form-row split">
+            <label
+              >How should Rylie contact you?<input
+                name="contact"
+                placeholder="Phone or Instagram @"
+                required /></label
+            ><label
+              >How will you pay?<select name="payment" required>
+                <option value="">Select one</option>
+                <option>Cash</option>
+                <option>Cash App</option>
+                <option>Zelle</option>
+                <option>Apple Pay</option>
+                <option>Card at appointment</option>
+              </select></label
+            >
+          </div>
+          <div class="form-row split">
+            <label
+              >What are we doing?<select name="service" required>
+                <option value="">Choose a service</option>
+                <option>Gel-X extensions</option>
+                <option>Acrylic set</option>
+                <option>Structured manicure</option>
+                <option>Removal / soak-off</option>
+              </select></label
+            ><label
+              >Length / shape<input
+                name="shape"
+                placeholder="ex. medium almond"
+            /></label>
+          </div>
+          <div class="form-row">
+            <label
+              >Tell Rylie about your dream set<textarea
+                name="notes"
+                rows="4"
+                placeholder="Colors, details, charms, anything you want her to know"
+              ></textarea>
+            </label>
+          </div>
+          <div class="form-row">
+            <label class="upload-label"
+              >Design inspiration (optional)<input
+                name="design"
+                type="file"
+                accept="image/*"
+              /><span>Choose an image ✦</span></label
+            >
+          </div>
+          <button class="button submit-request" type="submit">
+            Send request to Rylie <span>→</span>
+          </button>
+          <p class="form-status" id="formStatus" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <a class="brand-name footer-brand" href="index.html"
+        >Rylie <em>Nails</em><b>✦</b></a
+      >
+      <p>nail art with heart · Mansfield, TX</p>
+      <a
+        href="https://www.instagram.com/rylie.does.nails/"
+        target="_blank"
+        rel="noreferrer"
+        >@rylie.does.nails ↗</a
+      >
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

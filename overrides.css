@@ -451,11 +451,11 @@
 .marquee .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee-loop 24s linear infinite;
+  will-change: transform;
+  animation: marquee-loop 54s linear infinite;
 }
 .marquee .marquee-track span {
   flex: 0 0 auto;
-  padding-right: 36px;
 }
 @keyframes marquee-loop {
   to {

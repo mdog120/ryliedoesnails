@@ -11,6 +11,15 @@ let liveOpenings = {
   "2026-08-13": ["10:00 AM"],
 };
 let bookingSelection = { date: "", time: "" };
+const isBookable = (date, time) => {
+  const match = time.match(/(\d{1,2}):(\d{2})\s(AM|PM)/i);
+  if (!match) return false;
+  let hours = Number(match[1]) % 12;
+  if (match[3].toUpperCase() === "PM") hours += 12;
+  const startTime = new Date(`${date}T12:00:00`);
+  startTime.setHours(hours, Number(match[2]), 0, 0);
+  return startTime.getTime() - Date.now() > 2 * 60 * 60 * 1000;
+};
 
 const menuToggle = document.querySelector(".menu-toggle");
 const siteMenu = document.querySelector(".site-menu");
@@ -51,7 +60,7 @@ if (calendar) {
       const date = new Date(monday);
       date.setDate(monday.getDate() + index);
       const iso = date.toISOString().slice(0, 10);
-      const isOpen = (liveOpenings[iso] || []).length > 0;
+      const isOpen = (liveOpenings[iso] || []).some((time) => isBookable(iso, time));
       return `<div class="day ${isOpen ? "open" : "closed"}"><span class="name">${date.toLocaleDateString("en-US", { weekday: "short" })}</span><span class="date" ${isOpen ? `data-date="${iso}"` : ""}>${date.getDate()}</span></div>`;
     }).join("");
     calendar.querySelectorAll("[data-date]").forEach((day) =>
@@ -60,6 +69,7 @@ if (calendar) {
         chosenSlot.value = "";
         message.textContent = `${dateLabel(bookingSelection.date)} — choose a time that feels good ✦`;
         timeSlots.innerHTML = (liveOpenings[bookingSelection.date] || [])
+          .filter((time) => isBookable(bookingSelection.date, time))
           .map(
             (time) =>
               `<button class="time-slot" type="button" data-time="${time}">${time}</button>`,

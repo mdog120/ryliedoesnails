@@ -20,7 +20,7 @@ function doPost(event) {
     for (let row = 1; row < values.length; row += 1) {
       const [date, time, , status] = values[row];
       const slotKey = `${dateKey_(date, timeZone)}|${String(time).trim()}`;
-      if (dateKey_(date, timeZone) === request.appointmentDate && String(time).trim() === request.appointmentTime && String(status).trim() === 'Open' && !confirmedSlots.has(slotKey)) { matchingRow = row + 1; break; }
+      if (dateKey_(date, timeZone) === request.appointmentDate && String(time).trim() === request.appointmentTime && String(status).trim() === 'Open' && !confirmedSlots.has(slotKey) && isBookable_(date, time, timeZone)) { matchingRow = row + 1; break; }
     }
     if (!matchingRow) return response_({ ok: false, message: 'That time was just taken. Please choose another opening.' });
     let designUrl = '';
@@ -44,7 +44,7 @@ function getAvailability_() {
   for (let row = 1; row < values.length; row += 1) {
     const [date, time, , status] = values[row];
     const slotKey = `${dateKey_(date, timeZone)}|${String(time).trim()}`;
-    if (String(status).trim() === 'Open' && !confirmedSlots.has(slotKey)) {
+    if (String(status).trim() === 'Open' && !confirmedSlots.has(slotKey) && isBookable_(date, time, timeZone)) {
       const key = dateKey_(date, timeZone);
       if (!openings[key]) openings[key] = [];
       openings[key].push(String(time));
@@ -62,6 +62,13 @@ function getConfirmedSlots_(appointments, timeZone) {
     if (isConfirmed && date && time) slots.add(`${dateKey_(date, timeZone)}|${String(time).trim()}`);
   }
   return slots;
+}
+
+function isBookable_(date, time, timeZone) {
+  const dateText = String(date).trim();
+  const format = /^\d{4}-\d{2}-\d{2}$/.test(dateText) ? 'yyyy-MM-dd h:mm a' : 'MMM d, yyyy h:mm a';
+  const startTime = Utilities.parseDate(`${dateText} ${String(time).trim()}`, timeZone, format);
+  return startTime.getTime() - Date.now() > 2 * 60 * 60 * 1000;
 }
 
 function getDesignFolder_() { const folders = DriveApp.getFoldersByName('Rylie Nails — Design Inspiration'); return folders.hasNext() ? folders.next() : DriveApp.createFolder('Rylie Nails — Design Inspiration'); }

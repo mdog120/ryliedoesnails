@@ -111,6 +111,12 @@ if (calendar) {
 }
 
 const bookingForm = document.querySelector("#bookingForm");
+const designUpload = document.querySelector("#designUpload");
+const fileName = document.querySelector("#fileName");
+designUpload?.addEventListener("change", () => {
+  const file = designUpload.files[0];
+  fileName.textContent = file ? `${file.name} selected ♡` : "No image chosen yet";
+});
 bookingForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const status = document.querySelector("#formStatus");
@@ -143,6 +149,7 @@ bookingForm?.addEventListener("submit", (event) => {
     status.textContent =
       "Your request was sent to Rylie! She’ll reach out to confirm it soon ♡";
     bookingForm.reset();
+    if (fileName) fileName.textContent = "No image chosen yet";
   };
   const file = bookingForm.elements.design.files[0];
   if (!file) return send(null);

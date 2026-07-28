@@ -175,13 +175,10 @@
             </label>
           </div>
           <div class="form-row">
-            <label class="upload-label"
-              >Design inspiration (optional)<input
-                name="design"
-                type="file"
-                accept="image/*"
-              /><span>Choose an image ✦</span></label
-            >
+            <span class="upload-title">Design inspiration (optional)</span>
+            <input class="image-input" id="designUpload" name="design" type="file" accept="image/png,image/jpeg,image/webp" />
+            <label class="upload-button" for="designUpload">Choose an image ✦</label>
+            <span class="file-name" id="fileName">No image chosen yet</span>
           </div>
           <button class="button submit-request" type="submit">
             Send request to Rylie <span>→</span>

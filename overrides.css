@@ -270,19 +270,17 @@
   outline: 2px solid #bdd8eb;
   border-color: #5b91b1;
 }
-.upload-label input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-}
-.upload-label span {
+.upload-title { display:block; font:11px var(--mono); color:var(--ink); margin-bottom:8px; }
+.image-input { position:absolute; width:1px!important; height:1px; opacity:0; pointer-events:none; }
+.upload-button {
+  display:block;
   border: 1px dashed #8baec4;
   padding: 14px;
   text-align: center;
   cursor: pointer;
   background: #eef6fa;
 }
+.file-name { display:block; margin-top:8px; font:10px var(--mono); color:#5d7483; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .submit-request {
   border: 0;
   cursor: pointer;

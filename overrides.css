@@ -448,6 +448,20 @@
   transform: none;
   font-size: 28px;
 }
+.marquee .marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-loop 24s linear infinite;
+}
+.marquee .marquee-track span {
+  flex: 0 0 auto;
+  padding-right: 36px;
+}
+@keyframes marquee-loop {
+  to {
+    transform: translateX(-50%);
+  }
+}
 body {
   animation: page-in 0.48s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }

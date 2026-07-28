@@ -1,4 +1,3 @@
 window.RYLIE_BOOKING_CONFIG = {
-  // Paste the Google Apps Script web-app URL here after publishing Code.gs.
-  endpoint: "",
+  endpoint: "https://script.google.com/macros/s/AKfycbwXi3hQxTRd4oPbNyf3PqRQjBIjlikIYgmTBUvY23rkgMfj38snSlmzLK1Kicldt8KlKg/exec",
 };

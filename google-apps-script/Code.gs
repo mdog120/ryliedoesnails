@@ -14,11 +14,11 @@ function doPost(event) {
     const availability = spreadsheet.getSheetByName('Availability');
     const appointments = spreadsheet.getSheetByName('Appointments');
     const timeZone = spreadsheet.getSpreadsheetTimeZone();
-    const values = availability.getDataRange().getValues();
+    const values = availability.getDataRange().getDisplayValues();
     let matchingRow = 0;
     for (let row = 1; row < values.length; row += 1) {
       const [date, time, , status] = values[row];
-      if (date instanceof Date && Utilities.formatDate(date, timeZone, 'yyyy-MM-dd') === request.appointmentDate && String(time) === request.appointmentTime && status === 'Open') { matchingRow = row + 1; break; }
+      if (dateKey_(date, timeZone) === request.appointmentDate && String(time) === request.appointmentTime && String(status).trim() === 'Open') { matchingRow = row + 1; break; }
     }
     if (!matchingRow) return response_({ ok: false, message: 'That time was just taken. Please choose another opening.' });
     let designUrl = '';
@@ -35,15 +35,20 @@ function doPost(event) {
 
 function getAvailability_() {
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const values = spreadsheet.getSheetByName('Availability').getDataRange().getValues();
+  const values = spreadsheet.getSheetByName('Availability').getDataRange().getDisplayValues();
   const timeZone = spreadsheet.getSpreadsheetTimeZone();
   const openings = {};
   for (let row = 1; row < values.length; row += 1) {
     const [date, time, , status] = values[row];
-    if (date instanceof Date && status === 'Open') { const key = Utilities.formatDate(date, timeZone, 'yyyy-MM-dd'); (openings[key] ||= []).push(String(time)); }
+    if (String(status).trim() === 'Open') {
+      const key = dateKey_(date, timeZone);
+      if (!openings[key]) openings[key] = [];
+      openings[key].push(String(time));
+    }
   }
   return { openings };
 }
 
 function getDesignFolder_() { const folders = DriveApp.getFoldersByName('Rylie Nails — Design Inspiration'); return folders.hasNext() ? folders.next() : DriveApp.createFolder('Rylie Nails — Design Inspiration'); }
+function dateKey_(date, timeZone) { return Utilities.formatDate(new Date(date), timeZone, 'yyyy-MM-dd'); }
 function response_(data) { return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON); }

@@ -15,10 +15,12 @@ function doPost(event) {
     const appointments = spreadsheet.getSheetByName('Appointments');
     const timeZone = spreadsheet.getSpreadsheetTimeZone();
     const values = availability.getDataRange().getDisplayValues();
+    const confirmedSlots = getConfirmedSlots_(appointments, timeZone);
     let matchingRow = 0;
     for (let row = 1; row < values.length; row += 1) {
       const [date, time, , status] = values[row];
-      if (dateKey_(date, timeZone) === request.appointmentDate && String(time) === request.appointmentTime && String(status).trim() === 'Open') { matchingRow = row + 1; break; }
+      const slotKey = `${dateKey_(date, timeZone)}|${String(time).trim()}`;
+      if (dateKey_(date, timeZone) === request.appointmentDate && String(time).trim() === request.appointmentTime && String(status).trim() === 'Open' && !confirmedSlots.has(slotKey)) { matchingRow = row + 1; break; }
     }
     if (!matchingRow) return response_({ ok: false, message: 'That time was just taken. Please choose another opening.' });
     let designUrl = '';
@@ -28,25 +30,38 @@ function doPost(event) {
       designUrl = file.getUrl();
     }
     appointments.appendRow(['Pending', request.appointmentDate, request.appointmentTime, request.name, request.age, request.payment, request.service, request.shape, request.notes, designUrl, request.contact, new Date(), '']);
-    availability.getRange(matchingRow, 4).setValue('Requested');
     return response_({ ok: true, message: 'Your request was sent to Rylie!' });
   } catch (error) { return response_({ ok: false, message: error.message }); }
 }
 
 function getAvailability_() {
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const values = spreadsheet.getSheetByName('Availability').getDataRange().getDisplayValues();
+  const availability = spreadsheet.getSheetByName('Availability');
   const timeZone = spreadsheet.getSpreadsheetTimeZone();
+  const values = availability.getDataRange().getDisplayValues();
+  const confirmedSlots = getConfirmedSlots_(spreadsheet.getSheetByName('Appointments'), timeZone);
   const openings = {};
   for (let row = 1; row < values.length; row += 1) {
     const [date, time, , status] = values[row];
-    if (String(status).trim() === 'Open') {
+    const slotKey = `${dateKey_(date, timeZone)}|${String(time).trim()}`;
+    if (String(status).trim() === 'Open' && !confirmedSlots.has(slotKey)) {
       const key = dateKey_(date, timeZone);
       if (!openings[key]) openings[key] = [];
       openings[key].push(String(time));
     }
   }
   return { openings };
+}
+
+function getConfirmedSlots_(appointments, timeZone) {
+  const slots = new Set();
+  const values = appointments.getDataRange().getDisplayValues();
+  for (let row = 1; row < values.length; row += 1) {
+    const [status, date, time] = values[row];
+    const isConfirmed = ['Confirmed', 'Booked'].includes(String(status).trim());
+    if (isConfirmed && date && time) slots.add(`${dateKey_(date, timeZone)}|${String(time).trim()}`);
+  }
+  return slots;
 }
 
 function getDesignFolder_() { const folders = DriveApp.getFoldersByName('Rylie Nails — Design Inspiration'); return folders.hasNext() ? folders.next() : DriveApp.createFolder('Rylie Nails — Design Inspiration'); }
